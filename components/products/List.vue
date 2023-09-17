@@ -61,7 +61,7 @@
       </v-col>
 
       <v-col class="col-12 col-md-9 col-lg-9 col-xl-9">
-        <div id="products-card" class="container products-card">
+        <div id="productsCard" class="container">
           <!-- Legördülő menü a kártyák számának testreszabásához -->
           <div class="row d-flex">
             <div
@@ -176,6 +176,7 @@
                       class="pagination mb-2"
                       v-model="currentPage"
                       :length="totalPages"
+                      @input="scrollToTop"
                     ></v-pagination>
                   </v-container>
                 </v-col>
@@ -355,6 +356,14 @@ export default {
     toggleFilter(filter) {
       filter.active != filter.active;
     },
+    scrollToTop() {
+      // Az oldal legtetejére görgetés
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth", // Gördülő animáció (opcionális)
+      });
+    },
   },
 
   watch: {
@@ -403,8 +412,8 @@ export default {
   padding: 8px;
   margin: auto;
 }
-.container.products-card {
-  min-height: 400vh;
+.container#productsCard {
+  min-height: 400vh !important;
   overflow: auto;
 }
 
