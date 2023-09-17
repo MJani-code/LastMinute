@@ -7,7 +7,6 @@
     >
       <v-app>
         <v-row>
-          <!-- <div class="flex"> -->
           <!-- Carousel -->
           <div
             :style="{ width: '700px' }"
@@ -27,20 +26,41 @@
 
           <!-- Card details -->
           <div class="p-8 col-12 col-md-6 col-lg-6 col-xl-6">
-            <h5 class="text-xl font-semibold tracking-tight">
+            <v-card-title class="text-xl font-semibold tracking-tight">
               {{ product[0].title }}
-            </h5>
+            </v-card-title>
+            <v-card-text>
+              <v-row align="center" class="mb-1"> </v-row>
+              <div class="pb-1">
+                <v-icon class="mt-2 text-subtitle-1 mdi mdi-office-building">
+                  {{ product[0].shopName }}
+                </v-icon>
+              </div>
+              <div class="pb-1 d-flex" :style="{ 'justify-content': 'unset' }">
+                <v-icon class="text-subtitle-1 mdi mdi-map-marker"> </v-icon>
+                <span>
+                  {{
+                    product[0].reedemPostalCode +
+                    " " +
+                    product[0].reedemCity +
+                    " " +
+                    product[0].reedemAddress
+                  }}
+                </span>
+              </div>
+              <div class="pb-1 d-flex" :style="{ 'justify-content': 'unset' }">
+                <v-icon class="text-subtitle-1 mdi mdi-shape-outline"> </v-icon>
+                <span>
+                  {{ product[0].category }}
+                </span>
+              </div>
+            </v-card-text>
+            <v-divider class="mx-4"></v-divider>
+            <div class="font-italic">
+              <p>Leírás:</p>
+            </div>
 
-            <div>
-              <p>{{ product[0].shopName }}</p>
-            </div>
-            <div>
-              <p>Beváltóhely</p>
-            </div>
-            <div>
-              <p>{{ product[0].category }}</p>
-            </div>
-            <div>
+            <div class="text-justify">
               <p>{{ product[0].description }}</p>
             </div>
             <div>
@@ -49,7 +69,10 @@
               </v-chip>
               <p></p>
             </div>
-            <p>Mennyiség:</p>
+            <div class="font-italic">
+              <p>Mennyiség:</p>
+            </div>
+
             <div class="flex quantity-to-buy-container">
               <div class="decrease-quantity-to-buy">
                 <base-button
@@ -68,6 +91,7 @@
                   outlined
                   type="number"
                   class="quantity-to-buy"
+                  readonly
                 ></v-text-field>
               </template>
               <div class="increase-quantity-to-buy">
@@ -83,13 +107,24 @@
               </div>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-3xl font-bold">{{ totalValue + " Ft" }}</span>
+              <span class="text-3xl font-bold">{{ totalValue + " " + product[0].currency }}</span>
             </div>
-            <div>
-              <v-icon class="text-subtitle-1 mdi mdi-cart-outline"> </v-icon>
-            </div>
+            <base-button
+              @click="
+                addToCart({
+                  id: product[0].id,
+                  name: product[0].title,
+                  quantity: product[0].quantity,
+                  grossPrice: product[0].grossPrice,
+                  totalValue: totalValue,
+                  currency: product[0].currency
+                })
+              "
+              class="px-8 xl:px-10 py-3 mt-6 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white"
+            >
+              Kosárba
+            </base-button>
           </div>
-          <!-- </div> -->
         </v-row>
       </v-app>
     </section>
@@ -166,13 +201,15 @@ export default {
         this.totalValue = this.quantityToBuy * this.product[0].grossPrice;
       }
     },
+    addToCart(product) {
+      this.$store.dispatch("addToCart", product);
+      console.log(this.$store.state);
+    },
   },
 
   mounted() {
     this.totalValue = this.product[0].grossPrice;
     this.tags = this.product[0].tags.split(",");
-
-    console.log(this.tags);
     // this.$store.state.responseHandler = {
     //   title: 'Teszt',
     //   show: true,
@@ -196,5 +233,12 @@ export const head = {
 }
 .quantity-to-buy-container {
   position: relative;
+}
+.v-chip {
+  background: #0c66ee !important;
+  color: white !important;
+}
+.v-text-field .v-input__control {
+  border-radius: 50px !important;
 }
 </style>

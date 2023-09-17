@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-card :loading="loading" class="mx-auto my-12" max-width="300">
+    <v-card class="mx-auto my-12" max-width="300">
       <template slot="progress">
         <v-progress-linear
           color="blue darken-2"
@@ -26,7 +26,7 @@
             class="align-self-end text-subtitle-1 mdi mdi-tag"
             color="blue darken-2"
           >
-            {{ productPrice +' '+ productCurrency }}
+            {{ productPrice + " " + productCurrency }}
           </v-icon>
         </span>
       </v-card-title>
@@ -56,8 +56,10 @@
             :productTitle="productTitle"
           ></LandingCountdown>
         </v-card-title>
-        <v-card-title class="align-self-end">
-          <v-btn color="blue darken-2" text @click="reserve"> Érdekel </v-btn>
+        <v-card-title class="align-self-end" :productId="productId">
+          <router-link :to="'/products/view/?id=' + productId">
+            <v-btn color="blue darken-2" text> Érdekel </v-btn>
+          </router-link>
         </v-card-title>
       </div>
     </v-card>
@@ -67,6 +69,7 @@
 <script>
 export default {
   props: [
+    "productId",
     "expirationDate",
     "productPrice",
     "productCurrency",

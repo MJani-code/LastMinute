@@ -61,7 +61,7 @@
       </v-col>
 
       <v-col class="col-12 col-md-9 col-lg-9 col-xl-9">
-        <div class="container products-card">
+        <div id="products-card" class="container products-card">
           <!-- Legördülő menü a kártyák számának testreszabásához -->
           <div class="row d-flex">
             <div
@@ -404,7 +404,7 @@ export default {
   margin: auto;
 }
 .container.products-card {
-  min-height: 200vh;
+  min-height: 400vh;
   overflow: auto;
 }
 

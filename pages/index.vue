@@ -78,10 +78,6 @@
           :src="require('~/assets/img/pattern/star.png')"
           class="hidden sm:block absolute top-20 sm:top-28 right-16 lg:right-0 lg:left-[30rem] w-8"
         />
-        <!-- TODO: új termék hozzáadásához gomb és funciot -->
-        <!-- <BaseButton @click="addToCart({ name: 'Product' })"
-          >Termék hozzáadása a kosárhoz</BaseButton
-        >-->
       </BaseSection>
     </section>
 
@@ -104,6 +100,7 @@
           :key="index"
           data-aos="fade-up"
           :data-aos-delay="index === 0 ? 0 : index === 1 ? 150 : 300"
+          :productId="product.id"
           :expirationDate="product.validityEndDate"
           :productPrice="product.netPrice"
           :productCurrency="product.currency"

@@ -1,7 +1,7 @@
 <template>
   <li class="w-full">
     <router-link :to=url>
-      <v-list-item-title>
+      <v-list-item-title class="md:px-4 py-2 text-sm bg-transparent rounded-lg text-[#666666] hover:text-gray-900 focus:outline-none focus:shadow-outline">
         {{ name }}
       </v-list-item-title>
     </router-link>

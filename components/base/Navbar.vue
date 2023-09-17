@@ -39,13 +39,15 @@
         </ul>
       </div>
       <div :class="[open ? 'flex' : 'hidden lg:flex']" class="space-x-3">
-        <base-button class="relative">
-          <v-icon
-            class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-cart"
-          >
-          </v-icon>
-          <div class="count">{{ cartItemCount }}</div>
-        </base-button>
+        <router-link :to="'/cart'">
+          <base-button class="relative">
+            <v-icon
+              class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-cart"
+            >
+            </v-icon>
+            <div class="count">{{ cartItemCount }}</div>
+          </base-button>
+        </router-link>
         <base-button
           class="px-8 xl:px-10 py-3 mt-2 bg-inherit text-gradient border border-[#0c66ee]"
         >
