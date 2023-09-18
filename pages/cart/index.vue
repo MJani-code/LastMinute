@@ -23,7 +23,9 @@
                         :ripple="false"
                       >
                         <v-list-item-content>
-                          {{ cartItem.title }}
+                          <v-card-title>
+                            {{ cartItem.title }}
+                          </v-card-title>
                         </v-list-item-content>
                         <v-list-item-content class="justify-content-center">
                           <div class="d-flex quantity-to-buy-container">
@@ -82,26 +84,51 @@
                 </div>
               </v-card-text>
             </v-card>
-            <v-btn color="primary" @click="e6 = 2"> Tovább </v-btn>
+            <v-card v-else>
+              <v-card-title> Nincs megjeleníthető elem </v-card-title>
+            </v-card>
+            <v-btn
+              color="primary mt-4"
+              @click="e6 = 2"
+              v-if="cartItems.length > 0"
+            >
+              Tovább
+            </v-btn>
           </v-stepper-content>
 
-          <v-stepper-step :complete="e6 > 2" step="2">
-            Configure analytics for this app
-          </v-stepper-step>
+          <v-stepper-step :complete="e6 > 2" step="2"> Adatok </v-stepper-step>
 
           <v-stepper-content step="2">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
+            <v-card>
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  label="Name"
+                  required
+                ></v-text-field>
+
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  label="E-mail"
+                  required
+                ></v-text-field>
+
+                <v-checkbox
+                  v-model="checkbox"
+                  :rules="[(v) => !!v || 'You must agree to continue!']"
+                  label="Do you agree?"
+                  required
+                ></v-checkbox>
+
+              </v-form>
+            </v-card>
             <v-btn color="primary" @click="e6 = 3"> Tovább </v-btn>
             <v-btn text @click="e6 = 1"> Vissza </v-btn>
           </v-stepper-content>
 
-          <v-stepper-step :complete="e6 > 3" step="3">
-            Select an ad format and name ad unit
-          </v-stepper-step>
+          <v-stepper-step :complete="e6 > 3" step="3"> Fizetés </v-stepper-step>
 
           <v-stepper-content step="3">
             <v-card
@@ -113,7 +140,7 @@
             <v-btn text @click="e6 = 2"> Vissza </v-btn>
           </v-stepper-content>
 
-          <v-stepper-step step="4"> View setup instructions </v-stepper-step>
+          <v-stepper-step step="4"> Visszaigazolás</v-stepper-step>
           <v-stepper-content step="4">
             <v-card
               color="grey lighten-1"
@@ -135,9 +162,24 @@ export default {
     return {
       e6: 1,
       cartItems: this.$store.state.cartItems,
+      valid: true,
+      name: '',
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+      ],
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+      ],
+      checkbox: false,
     };
   },
+  mounted() {},
   methods: {
+    //
+
     increaseQuantityToBuy(index) {
       this.cartItems[index].quantityToBuy++;
       this.cartItems[index].totalValue =
@@ -170,7 +212,7 @@ export default {
 .v-list-item__content > * {
   flex: unset;
 }
-.v-list-item{
+.v-list-item {
   border: solid 0.5px lightgray;
   border-radius: 20px;
   margin-bottom: 10px;

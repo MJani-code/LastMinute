@@ -24,6 +24,9 @@ export default {
   plugins: ['~/plugins/smooth-scroll.js', '~/plugins/mdi.js', '~/mixins/defaultMixin.js', '~/store/index.js'],
   components: true,
   buildModules: ['@nuxt/postcss8', '@nuxtjs/vuetify'],
+  router: {
+    //middleware: ['auth'], // Itt adj hozzá middleware-t, például az 'auth' middleware-t
+  },
   modules: [],
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
