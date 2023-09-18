@@ -107,17 +107,20 @@
               </div>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-3xl font-bold">{{ totalValue + " " + product[0].currency }}</span>
+              <span class="text-3xl font-bold">{{
+                totalValue + " " + product[0].currency
+              }}</span>
             </div>
             <base-button
               @click="
                 addToCart({
                   id: product[0].id,
-                  name: product[0].title,
+                  title: product[0].title,
                   quantity: product[0].quantity,
                   grossPrice: product[0].grossPrice,
                   totalValue: totalValue,
-                  currency: product[0].currency
+                  currency: product[0].currency,
+                  quantityToBuy: quantityToBuy
                 })
               "
               class="px-8 xl:px-10 py-3 mt-6 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white"
@@ -203,7 +206,6 @@ export default {
     },
     addToCart(product) {
       this.$store.dispatch("addToCart", product);
-      console.log(this.$store.state);
     },
   },
 
