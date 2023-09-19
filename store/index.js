@@ -13,7 +13,12 @@ export const createStore = () => {
         user: null,
         userRole: null,
       },
-      cartItems: [],
+      cart:
+      {
+        items: [],
+        cartValue: null
+      }
+      ,
       responseHandler: {
         show: false,
         title: 'Teszt title',
@@ -55,8 +60,14 @@ export const createStore = () => {
       SET_CLICKED_BUTTON(state, value) {
         state.responseHandler.clickedButton = value;
       },
-      addToCart(state, product) {
-        state.cartItems.push(product)
+      addToCart(state, payload) {
+        const { product, totalValue } = payload;
+        state.cart.items.push(product)
+        if (state.cart.cartValue) {
+          state.cart.cartValue += totalValue;
+        } else {
+          state.cart.cartValue = totalValue;
+        }
       }
     },
 
@@ -159,7 +170,7 @@ export const createStore = () => {
         return state.responseHandler.clickedButton;
       },
       cartItemCount: state => {
-        return state.cartItems.length
+        return state.cart.items.length
       }
 
     }

@@ -121,7 +121,7 @@
                   totalValue: totalValue,
                   currency: product[0].currency,
                   quantityToBuy: quantityToBuy
-                })
+                },totalValue )
               "
               class="px-8 xl:px-10 py-3 mt-6 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white"
             >
@@ -173,7 +173,6 @@ export default {
         id: productId,
       });
       const product = response.data;
-
       return { product };
     } catch (error) {
       console.log(error);
@@ -185,7 +184,6 @@ export default {
     quantityToBuy(newVal) {
       if (newVal !== null && newVal < 1) {
         this.quantityToBuy = 1; // Ha negatív számot írnak be, automatikusan 1 kerül a helyére
-        console.log("mínuszba mentünk");
       }
     },
   },
@@ -204,13 +202,15 @@ export default {
         this.totalValue = this.quantityToBuy * this.product[0].grossPrice;
       }
     },
-    addToCart(product) {
-      this.$store.dispatch("addToCart", product);
+    addToCart(product, totalValue) {
+      this.$store.dispatch("addToCart", { product, totalValue });
+      //TODO: Alert üzenetben jelezni a kosárhoz adás sikerességét
     },
   },
 
   mounted() {
     this.totalValue = this.product[0].grossPrice;
+    console.log(this.totalValue);
     this.tags = this.product[0].tags.split(",");
     // this.$store.state.responseHandler = {
     //   title: 'Teszt',

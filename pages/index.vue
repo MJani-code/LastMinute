@@ -102,7 +102,7 @@
           :data-aos-delay="index === 0 ? 0 : index === 1 ? 150 : 300"
           :productId="product.id"
           :expirationDate="product.validityEndDate"
-          :productPrice="product.netPrice"
+          :productPrice="product.grossPrice"
           :productCurrency="product.currency"
           :productTitle="product.title"
           :productLocation="
@@ -447,7 +447,7 @@ export default {
   methods: {
     addToCart(product) {
       this.$store.dispatch("addToCart", product);
-      console.log(this.$store.state);
+      //TODO: Alert üzenetben jelezni a kosárhoz adás sikerességét
     },
   },
   mounted() {

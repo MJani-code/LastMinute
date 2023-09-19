@@ -5,26 +5,26 @@
       class="max-w-screen-xl mx-2 sm:mx-auto px-4 sm:px-6 lg:px-0 py-6 pb-20 sm:py-8 rounded-[2.25rem] sm:rounded-xl bg-white shadow-lg sm:shadow-md transform lg:-translate-y-12"
     >
       <v-app>
-        <v-stepper v-model="e6" vertical>
+        <v-stepper v-model="e6" vertical class="m-4">
           <v-stepper-step :complete="e6 > 1" step="1">
             Kosár véglegesítése
             <!-- <small>Summarize if needed</small> -->
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card v-if="cartItems.length > 0">
+            <v-card v-if="cart.items.length > 0">
               <v-card-text>
                 <div class="">
                   <v-list flat>
                     <v-list-item-group>
                       <v-list-item
-                        v-for="(cartItem, index) in cartItems"
+                        v-for="(item, index) in cart.items"
                         :key="index"
                         :ripple="false"
                       >
                         <v-list-item-content>
                           <v-card-title>
-                            {{ cartItem.title }}
+                            {{ item.title }}
                           </v-card-title>
                         </v-list-item-content>
                         <v-list-item-content class="justify-content-center">
@@ -42,7 +42,7 @@
                             </div>
                             <template>
                               <v-text-field
-                                v-model="cartItem.quantityToBuy"
+                                v-model="item.quantityToBuy"
                                 outlined
                                 type="number"
                                 class="quantity-to-buy"
@@ -64,7 +64,9 @@
                           </div>
                         </v-list-item-content>
                         <v-list-item-content>
-                          {{ cartItem.totalValue + " " + cartItem.currency }}
+                          <v-card-title>
+                            {{ item.totalValue + " " + item.currency }}
+                          </v-card-title>
                         </v-list-item-content>
                         <v-list-item-content>
                           <v-btn
@@ -72,7 +74,7 @@
                             icon
                             small
                             color="primary"
-                            @click="removeTodo(index)"
+                            @click="removeTodo(item, index)"
                           >
                             <v-icon class="mdi mdi-close-circle-outline">
                             </v-icon>
@@ -82,6 +84,10 @@
                     </v-list-item-group>
                   </v-list>
                 </div>
+                Összesen:
+                <v-card-title v-model="cart.cartValue">
+                {{ cart.cartValue + " " + cart.items[0].currency}}
+              </v-card-title>
               </v-card-text>
             </v-card>
             <v-card v-else>
@@ -90,7 +96,7 @@
             <v-btn
               color="primary mt-4"
               @click="e6 = 2"
-              v-if="cartItems.length > 0"
+              v-if="cart.items.length > 0"
             >
               Tovább
             </v-btn>
@@ -99,7 +105,7 @@
           <v-stepper-step :complete="e6 > 2" step="2"> Adatok </v-stepper-step>
 
           <v-stepper-content step="2">
-            <v-card>
+            <v-card class="mb-4 pb-4">
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-text-field
                   v-model="name"
@@ -116,15 +122,27 @@
                 ></v-text-field>
 
                 <v-checkbox
-                  v-model="checkbox"
-                  :rules="[(v) => !!v || 'You must agree to continue!']"
-                  label="Do you agree?"
+                  v-model="checkboxAszf"
+                  :rules="checkboxRulesAszf"
+                  label="Elfogadom az általános szerződési feltételket"
                   required
                 ></v-checkbox>
 
+                <v-checkbox
+                  v-model="checkboxGdpr"
+                  :rules="checkboxRulesGdpr"
+                  label="Elfogadom az adatvédelmi szabályzatot"
+                  required
+                ></v-checkbox>
               </v-form>
             </v-card>
-            <v-btn color="primary" @click="e6 = 3"> Tovább </v-btn>
+            <v-btn
+              color="primary"
+              :disabled="!isNextButtonVisible"
+              @click="e6 = 3"
+            >
+              Tovább
+            </v-btn>
             <v-btn text @click="e6 = 1"> Vissza </v-btn>
           </v-stepper-content>
 
@@ -161,40 +179,76 @@ export default {
   data() {
     return {
       e6: 1,
-      cartItems: this.$store.state.cartItems,
-      valid: true,
-      name: '',
+      cart:{
+        items: this.$store.state.cart.items,
+        cartValue: this.$store.state.cart.cartValue,
+      },
+      valid: false,
+      name: "",
       nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+        (v) => !!v || "Name is required",
       ],
-      email: '',
+      email: "",
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
-      checkbox: false,
+      checkboxRulesAszf: [(v) => !!v || "You must agree to continue!"],
+      checkboxRulesGdpr: [(v) => !!v || "You must agree to continue!"],
+      checkboxAszf: false,
+      checkboxGdpr: false,
     };
   },
-  mounted() {},
+  computed: {
+    isNextButtonVisible() {
+      return (
+        this.nameRules.every((rule) => rule(this.name) === true) &&
+        this.emailRules.every((rule) => rule(this.email) === true) &&
+        this.checkboxRulesAszf.every((rule) => rule(this.checkboxAszf) === true) &&
+        this.checkboxRulesGdpr.every((rule) => rule(this.checkboxGdpr) === true)
+      );
+    },
+  },
+  mounted() {
+    this.valid = false;
+    console.log(this.$store.state.cart);
+  },
   methods: {
-    //
-
+    validate() {
+      this.$refs.form.validate();
+    },
     increaseQuantityToBuy(index) {
-      this.cartItems[index].quantityToBuy++;
-      this.cartItems[index].totalValue =
-        this.cartItems[index].quantityToBuy * this.cartItems[index].grossPrice;
+      this.cart.items[index].quantityToBuy++;
+      this.cart.items[index].totalValue =
+        this.cart.items[index].quantityToBuy * this.cart.items[index].grossPrice;
+
+        this.cart.cartValue +=
+        this.cart.items[index].grossPrice;
+
+        this.$store.state.cart.cartValue +=
+        this.cart.items[index].grossPrice;
     },
     decreaseQuantityToBuy(index) {
-      if (this.cartItems[index].quantityToBuy > 1) {
-        this.cartItems[index].quantityToBuy--;
-        this.cartItems[index].totalValue =
-          this.cartItems[index].quantityToBuy *
-          this.cartItems[index].grossPrice;
+      if (this.cart.items[index].quantityToBuy > 1) {
+        this.cart.items[index].quantityToBuy--;
+        this.cart.items[index].totalValue =
+          this.cart.items[index].quantityToBuy *
+          this.cart.items[index].grossPrice;
+
+          this.cart.cartValue -=
+          this.cart.items[index].grossPrice;
+
+          this.$store.state.cart.cartValue -=
+          this.cart.items[index].grossPrice;
       }
     },
-    removeTodo(index) {
-      this.cartItems.splice(index, 1);
+    removeTodo(item, index) {
+      this.cart.items.splice(index, 1);
+      console.log(item.quantityToBuy, item.grossPrice);
+
+      this.cart.cartValue -= item.quantityToBuy * item.grossPrice
+
+      this.$store.state.cart.cartValue -= item.quantityToBuy * item.grossPrice
     },
   },
 };

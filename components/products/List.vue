@@ -208,7 +208,7 @@ export default {
         { label: "100", value: 100 },
         { label: "Összes", value: this.productsData.length },
       ],
-      perPage: 5, // Megjelenített elemek száma oldalanként
+      perPage: 10, // Megjelenített elemek száma oldalanként
       searchText: "",
       currentPage: 1, // Jelenlegi oldal
       expandedPanels: [0, 1, 2],
