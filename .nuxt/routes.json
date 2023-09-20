@@ -3,35 +3,30 @@
     "name": "admin",
     "path": "/admin",
     "component": "/Users/air/Documents/Progs/Projects/LastMinute/LastMinute_FE/pages/admin/index.vue",
-    "chunkName": "pages/admin/index",
-    "_name": "_65d006e2"
+    "chunkName": "pages/admin/index"
   },
   {
     "name": "cart",
     "path": "/cart",
     "component": "/Users/air/Documents/Progs/Projects/LastMinute/LastMinute_FE/pages/cart/index.vue",
-    "chunkName": "pages/cart/index",
-    "_name": "_1c09fffa"
+    "chunkName": "pages/cart/index"
   },
   {
     "name": "products",
     "path": "/products",
     "component": "/Users/air/Documents/Progs/Projects/LastMinute/LastMinute_FE/pages/products/index.vue",
-    "chunkName": "pages/products/index",
-    "_name": "_db07a572"
+    "chunkName": "pages/products/index"
   },
   {
     "name": "products-view",
     "path": "/products/view",
     "component": "/Users/air/Documents/Progs/Projects/LastMinute/LastMinute_FE/pages/products/view.vue",
-    "chunkName": "pages/products/view",
-    "_name": "_453bb840"
+    "chunkName": "pages/products/view"
   },
   {
     "name": "index",
     "path": "/",
     "component": "/Users/air/Documents/Progs/Projects/LastMinute/LastMinute_FE/pages/index.vue",
-    "chunkName": "pages/index",
-    "_name": "_47d79fa2"
+    "chunkName": "pages/index"
   }
 ]

@@ -155,9 +155,44 @@
                     ></LandingCountdown>
                   </v-card-title>
                   <v-card-title class="align-self-end">
-                    <router-link :to="'/products/view/?id=' + product.id">
-                      <v-btn color="blue darken-2" text> Érdekel </v-btn>
-                    </router-link>
+                    <div :style="{ display: 'flex', 'align-items': 'center' }">
+                      <router-link :to="'/products/view/?id=' + product.id">
+                        <base-button
+                          class="flex px-4 xl:px-4 py-3 bg-inherit border border-[#0c66ee]"
+                        >
+                          <v-icon
+                            class="align-self-end text-subtitle-1 mdi mdi-eye-arrow-right-outline"
+                            color="blue darken-2"
+                            large
+                          >
+                          </v-icon>
+                        </base-button>
+                      </router-link>
+                      <base-button
+                        class="flex px-4 xl:px-4 py-3 bg-inherit border border-[#0c66ee]"
+                        @click="
+                          addToCart(
+                            {
+                              id: product.id,
+                              title: product.title,
+                              quantity: product.quantity,
+                              grossPrice: product.grossPrice,
+                              totalValue: product.grossPrice,
+                              currency: product.currency,
+                              quantityToBuy: 1,
+                            },
+                            product.grossPrice
+                          )
+                        "
+                      >
+                        <v-icon
+                          class="align-self-end text-subtitle-1 mdi mdi-cart-outline"
+                          color="blue darken-2"
+                          large
+                        >
+                        </v-icon>
+                      </base-button>
+                    </div>
                   </v-card-title>
                 </div>
               </v-card>
@@ -364,6 +399,11 @@ export default {
         behavior: "smooth", // Gördülő animáció (opcionális)
       });
     },
+    addToCart(product, totalValue) {
+      console.log(product, totalValue)
+      this.$store.dispatch("addToCart", { product, totalValue });
+      //TODO: Alert üzenetben jelezni a kosárhoz adás sikerességét
+    },
   },
 
   watch: {
@@ -389,7 +429,7 @@ export default {
   font-size: 13px;
 }
 
-.v-messages.theme--light {
+.v-input.small-checkbox .v-messages.theme--light {
   display: none;
 }
 .v-input__slot {

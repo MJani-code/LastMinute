@@ -26,8 +26,11 @@
 
           <!-- Card details -->
           <div class="p-8 col-12 col-md-6 col-lg-6 col-xl-6">
-            <v-card-title class="text-xl font-semibold tracking-tight">
+            <v-card-title class="text-xl font-semibold tracking-tight" :style="{ 'justify-content': 'space-between' }">
               {{ product[0].title }}
+              <LandingCountdown
+                :expirationDate="product[0].validityEndDate"
+              ></LandingCountdown>
             </v-card-title>
             <v-card-text>
               <v-row align="center" class="mb-1"> </v-row>
@@ -113,15 +116,18 @@
             </div>
             <base-button
               @click="
-                addToCart({
-                  id: product[0].id,
-                  title: product[0].title,
-                  quantity: product[0].quantity,
-                  grossPrice: product[0].grossPrice,
-                  totalValue: totalValue,
-                  currency: product[0].currency,
-                  quantityToBuy: quantityToBuy
-                },totalValue )
+                addToCart(
+                  {
+                    id: product[0].id,
+                    title: product[0].title,
+                    quantity: product[0].quantity,
+                    grossPrice: product[0].grossPrice,
+                    totalValue: totalValue,
+                    currency: product[0].currency,
+                    quantityToBuy: quantityToBuy,
+                  },
+                  totalValue
+                )
               "
               class="px-8 xl:px-10 py-3 mt-6 bg-gradient-to-r from-[#468ef9] to-[#0c66ee] text-white"
             >

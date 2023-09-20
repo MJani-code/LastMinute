@@ -426,23 +426,44 @@ export default {
   mixins: [aosMixin],
   async asyncData() {
     try {
-      const response = await APIGET("getLandingNewProductsData");
-      const response2 = await APIGET("getLandingPartnersData");
+      const [response1, response2] = await Promise.all([
+        APIGET("getLandingNewProductsData"),
+        APIGET("getLandingPartnersData"),
+      ]);
 
-      if (!response.data.error && !response2.data.error) {
-        const newProducts = response.data.map((item) => ({ ...item }));
+      if (!response1.data.error && !response2.data.error) {
+        const newProducts = response1.data.map((item) => ({ ...item }));
         const partners = response2.data.map((item) => ({ ...item }));
         return { newProducts, partners };
       }
-      if (response.data.error) {
-        let errorMessage = "";
-        errorMessage += response.data.error ? response.data.error + ";" : "";
-        errorMessage += response2.data.error ? response2.data.error + ";" : "";
-        return { error: errorMessage };
-      }
-    } catch (err) {
+
+      // Hibakezelés, ha bármelyik kérelem hibát dob
+      let errorMessage = "";
+      errorMessage += response1.data.error ? response1.data.error + ";" : "";
+      errorMessage += response2.data.error ? response2.data.error + ";" : "";
+      return { error: errorMessage };
+    } catch (error) {
       return { error: err.message };
     }
+
+    // try {
+    //   const response = await APIGET("getLandingNewProductsData");
+    //   const response2 = await APIGET("getLandingPartnersData");
+
+    //   if (!response.data.error && !response2.data.error) {
+    //     const newProducts = response.data.map((item) => ({ ...item }));
+    //     const partners = response2.data.map((item) => ({ ...item }));
+    //     return { newProducts, partners };
+    //   }
+    //   if (response.data.error) {
+    //     let errorMessage = "";
+    //     errorMessage += response.data.error ? response.data.error + ";" : "";
+    //     errorMessage += response2.data.error ? response2.data.error + ";" : "";
+    //     return { error: errorMessage };
+    //   }
+    // } catch (err) {
+    //   return { error: err.message };
+    // }
   },
   methods: {
     addToCart(product) {

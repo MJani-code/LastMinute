@@ -14,13 +14,13 @@
           <v-stepper-content step="1">
             <v-card v-if="cart.items.length > 0">
               <v-card-text>
-                <div class="">
                   <v-list flat>
                     <v-list-item-group>
                       <v-list-item
                         v-for="(item, index) in cart.items"
                         :key="index"
                         :ripple="false"
+                        class="col col-sm-12 col-md-12"
                       >
                         <v-list-item-content>
                           <v-card-title>
@@ -83,7 +83,6 @@
                       </v-list-item>
                     </v-list-item-group>
                   </v-list>
-                </div>
                 Összesen:
                 <v-card-title v-model="cart.cartValue">
                 {{ cart.cartValue + " " + cart.items[0].currency}}
@@ -186,15 +185,15 @@ export default {
       valid: false,
       name: "",
       nameRules: [
-        (v) => !!v || "Name is required",
+        (v) => !!v || "Kötelező mező",
       ],
       email: "",
       emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        (v) => !!v || "Kötelező mező",
+        (v) => /.+@.+\..+/.test(v) || "Nem valós email cím",
       ],
-      checkboxRulesAszf: [(v) => !!v || "You must agree to continue!"],
-      checkboxRulesGdpr: [(v) => !!v || "You must agree to continue!"],
+      checkboxRulesAszf: [(v) => !!v || "Kötelező elfogadni!"],
+      checkboxRulesGdpr: [(v) => !!v || "Kötelező elfogadni!"],
       checkboxAszf: false,
       checkboxGdpr: false,
     };
@@ -270,5 +269,49 @@ export default {
   border: solid 0.5px lightgray;
   border-radius: 20px;
   margin-bottom: 10px;
+}
+
+@media (max-width: 576px) {
+  .v-list-item{
+    display: block;
+  }
+  .v-input__control{
+    width: max-content;
+  }
+}
+
+/* Kis kijelzők (tablet és nagyobb telefonok) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .v-list-item{
+    display: block;
+  }
+  .v-input__control{
+    width: max-content;
+  }
+}
+
+</style>
+
+<style>
+.v-text-field__slot input[type="number"]{
+  text-align: center !important;
+}
+
+[type="number"]:focus {
+  --tw-ring-offset-shadow: unset;
+  --tw-ring-shadow: unset;
+}
+.quantity-to-buy {
+  max-width: 40px;
+}
+.quantity-to-buy-container {
+  position: relative;
+}
+.v-chip {
+  background: #0c66ee !important;
+  color: white !important;
+}
+.v-text-field .v-input__control {
+  border-radius: 50px !important;
 }
 </style>
