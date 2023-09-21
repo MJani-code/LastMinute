@@ -102,7 +102,17 @@
                   ></v-progress-linear>
                 </template>
 
-                <v-img height="200" :src="product.url"></v-img>
+                <v-img height="200" :src="product.url">
+                  <div class="favorite">
+                    <v-icon
+                      dark
+                      :color="product.favorite ? 'red' : '#1976D2'"
+                      @click="toggleColor(product)"
+                    >
+                      mdi-heart
+                    </v-icon>
+                  </div>
+                </v-img>
 
                 <v-card-title class="d-flex">
                   <span class="align-self-start text-subtitle-1">{{
@@ -248,6 +258,7 @@ export default {
       currentPage: 1, // Jelenlegi oldal
       expandedPanels: [0, 1, 2],
       showPanel: true,
+      isRed: false,
       filters: {
         reedemCity: [{}],
         reedemDistrict: [{}],
@@ -400,9 +411,12 @@ export default {
       });
     },
     addToCart(product, totalValue) {
-      console.log(product, totalValue)
+      console.log(product, totalValue);
       this.$store.dispatch("addToCart", { product, totalValue });
       //TODO: Alert üzenetben jelezni a kosárhoz adás sikerességét
+    },
+    toggleColor(product) {
+      product.favorite = !product.favorite; // Invertáljuk a színt
     },
   },
 
@@ -455,6 +469,13 @@ export default {
 .container#productsCard {
   min-height: 400vh !important;
   overflow: auto;
+}
+div.favorite{
+  background-color: #c6c4c48f;
+  height: fit-content;
+  border-radius: 0 0 20px;
+  width: fit-content;
+  padding: 6px;
 }
 
 @media (min-width: 992px) {

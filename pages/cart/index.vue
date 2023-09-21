@@ -14,79 +14,79 @@
           <v-stepper-content step="1">
             <v-card v-if="cart.items.length > 0">
               <v-card-text>
-                  <v-list flat>
-                    <v-list-item-group>
-                      <v-list-item
-                        v-for="(item, index) in cart.items"
-                        :key="index"
-                        :ripple="false"
-                        class="col col-sm-12 col-md-12"
-                      >
-                        <v-list-item-content>
-                          <v-card-title>
-                            {{ item.title }}
-                          </v-card-title>
-                        </v-list-item-content>
-                        <v-list-item-content class="justify-content-center">
-                          <div class="d-flex quantity-to-buy-container">
-                            <div class="decrease-quantity-to-buy">
-                              <base-button
-                                class="relative mr-2"
-                                @click="decreaseQuantityToBuy(index)"
+                <v-list flat>
+                  <v-list-item-group>
+                    <v-list-item
+                      v-for="(item, index) in cart.items"
+                      :key="index"
+                      :ripple="false"
+                      class="col col-sm-12 col-md-12"
+                    >
+                      <v-list-item-content>
+                        <v-card-title>
+                          {{ item.title }}
+                        </v-card-title>
+                      </v-list-item-content>
+                      <v-list-item-content class="justify-content-center">
+                        <div class="d-flex quantity-to-buy-container">
+                          <div class="decrease-quantity-to-buy">
+                            <base-button
+                              class="relative mr-2"
+                              @click="decreaseQuantityToBuy(index)"
+                            >
+                              <v-icon
+                                class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-minus-circle-outline"
                               >
-                                <v-icon
-                                  class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-minus-circle-outline"
-                                >
-                                </v-icon>
-                              </base-button>
-                            </div>
-                            <template>
-                              <v-text-field
-                                v-model="item.quantityToBuy"
-                                outlined
-                                type="number"
-                                class="quantity-to-buy"
-                                readonly
-                                :hide-details="true"
-                              ></v-text-field>
-                            </template>
-                            <div class="increase-quantity-to-buy">
-                              <base-button
-                                class="relative ml-2"
-                                @click="increaseQuantityToBuy(index)"
-                              >
-                                <v-icon
-                                  class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-plus-circle-outline"
-                                >
-                                </v-icon>
-                              </base-button>
-                            </div>
+                              </v-icon>
+                            </base-button>
                           </div>
-                        </v-list-item-content>
-                        <v-list-item-content>
-                          <v-card-title>
-                            {{ item.totalValue + " " + item.currency }}
-                          </v-card-title>
-                        </v-list-item-content>
-                        <v-list-item-content>
-                          <v-btn
-                            class="mx-2"
-                            icon
-                            small
-                            color="primary"
-                            @click="removeTodo(item, index)"
-                          >
-                            <v-icon class="mdi mdi-close-circle-outline">
-                            </v-icon>
-                          </v-btn>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                  </v-list>
+                          <template>
+                            <v-text-field
+                              v-model="item.quantityToBuy"
+                              outlined
+                              type="number"
+                              class="quantity-to-buy"
+                              readonly
+                              :hide-details="true"
+                            ></v-text-field>
+                          </template>
+                          <div class="increase-quantity-to-buy">
+                            <base-button
+                              class="relative ml-2"
+                              @click="increaseQuantityToBuy(index)"
+                            >
+                              <v-icon
+                                class="px-6 xl:px-6 py-3 mt-2 bg-inherit text-gradient border-[#0c66ee] mdi mdi-plus-circle-outline"
+                              >
+                              </v-icon>
+                            </base-button>
+                          </div>
+                        </div>
+                      </v-list-item-content>
+                      <v-list-item-content>
+                        <v-card-title>
+                          {{ item.totalValue + " " + item.currency }}
+                        </v-card-title>
+                      </v-list-item-content>
+                      <v-list-item-content>
+                        <v-btn
+                          class="mx-2"
+                          icon
+                          small
+                          color="primary"
+                          @click="removeTodo(item, index)"
+                        >
+                          <v-icon class="mdi mdi-close-circle-outline">
+                          </v-icon>
+                        </v-btn>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
                 Összesen:
                 <v-card-title v-model="cart.cartValue">
-                {{ cart.cartValue + " " + cart.items[0].currency}}
-              </v-card-title>
+                  {{ cart.cartValue + " " + cart.items[0].currency }}
+                </v-card-title>
               </v-card-text>
             </v-card>
             <v-card v-else>
@@ -178,15 +178,13 @@ export default {
   data() {
     return {
       e6: 1,
-      cart:{
-        items: this.$store.state.cart.items,
-        cartValue: this.$store.state.cart.cartValue,
+      cart: {
+        items: [],
+        cartValue: 0,
       },
       valid: false,
       name: "",
-      nameRules: [
-        (v) => !!v || "Kötelező mező",
-      ],
+      nameRules: [(v) => !!v || "Kötelező mező"],
       email: "",
       emailRules: [
         (v) => !!v || "Kötelező mező",
@@ -203,14 +201,24 @@ export default {
       return (
         this.nameRules.every((rule) => rule(this.name) === true) &&
         this.emailRules.every((rule) => rule(this.email) === true) &&
-        this.checkboxRulesAszf.every((rule) => rule(this.checkboxAszf) === true) &&
+        this.checkboxRulesAszf.every(
+          (rule) => rule(this.checkboxAszf) === true
+        ) &&
         this.checkboxRulesGdpr.every((rule) => rule(this.checkboxGdpr) === true)
       );
     },
   },
   mounted() {
     this.valid = false;
-    console.log(this.$store.state.cart);
+    const storedCart = localStorage.getItem("cart");
+
+    if (storedCart) {
+      // Ha vannak tárolt adatok, akkor konvertáld JSON-ból JavaScript objektummá
+      const parsedCart = JSON.parse(storedCart);
+
+      // Frissítsd a komponens állapotát az olvasott adatokkal
+      this.cart = parsedCart;
+    }
   },
   methods: {
     validate() {
@@ -219,13 +227,12 @@ export default {
     increaseQuantityToBuy(index) {
       this.cart.items[index].quantityToBuy++;
       this.cart.items[index].totalValue =
-        this.cart.items[index].quantityToBuy * this.cart.items[index].grossPrice;
-
-        this.cart.cartValue +=
+        this.cart.items[index].quantityToBuy *
         this.cart.items[index].grossPrice;
 
-        this.$store.state.cart.cartValue +=
-        this.cart.items[index].grossPrice;
+      this.cart.cartValue += this.cart.items[index].grossPrice;
+
+      this.$store.state.cart.cartValue += this.cart.items[index].grossPrice;
     },
     decreaseQuantityToBuy(index) {
       if (this.cart.items[index].quantityToBuy > 1) {
@@ -234,20 +241,19 @@ export default {
           this.cart.items[index].quantityToBuy *
           this.cart.items[index].grossPrice;
 
-          this.cart.cartValue -=
-          this.cart.items[index].grossPrice;
+        this.cart.cartValue -= this.cart.items[index].grossPrice;
 
-          this.$store.state.cart.cartValue -=
-          this.cart.items[index].grossPrice;
+        this.$store.state.cart.cartValue -= this.cart.items[index].grossPrice;
       }
     },
     removeTodo(item, index) {
       this.cart.items.splice(index, 1);
+      this.$store.state.cart.items.splice(index, 1);
       console.log(item.quantityToBuy, item.grossPrice);
 
-      this.cart.cartValue -= item.quantityToBuy * item.grossPrice
+      this.cart.cartValue -= item.quantityToBuy * item.grossPrice;
 
-      this.$store.state.cart.cartValue -= item.quantityToBuy * item.grossPrice
+      this.$store.state.cart.cartValue -= item.quantityToBuy * item.grossPrice;
     },
   },
 };
@@ -272,28 +278,27 @@ export default {
 }
 
 @media (max-width: 576px) {
-  .v-list-item{
+  .v-list-item {
     display: block;
   }
-  .v-input__control{
+  .v-input__control {
     width: max-content;
   }
 }
 
 /* Kis kijelzők (tablet és nagyobb telefonok) */
 @media (min-width: 577px) and (max-width: 768px) {
-  .v-list-item{
+  .v-list-item {
     display: block;
   }
-  .v-input__control{
+  .v-input__control {
     width: max-content;
   }
 }
-
 </style>
 
 <style>
-.v-text-field__slot input[type="number"]{
+.v-text-field__slot input[type="number"] {
   text-align: center !important;
 }
 

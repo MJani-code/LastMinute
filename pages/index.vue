@@ -442,7 +442,7 @@ export default {
       errorMessage += response1.data.error ? response1.data.error + ";" : "";
       errorMessage += response2.data.error ? response2.data.error + ";" : "";
       return { error: errorMessage };
-    } catch (error) {
+    } catch (err) {
       return { error: err.message };
     }
 

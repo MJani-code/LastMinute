@@ -75,6 +75,12 @@ export default {
       routers,
     };
   },
+  mounted() {
+    this.storage();
+  },
+  created() {
+    //
+  },
   computed: {
     cartItemCount() {
       return this.$store.getters.cartItemCount;
@@ -83,6 +89,20 @@ export default {
   methods: {
     dropdownToggler() {
       this.dropdownNavbar = !this.dropdownNavbar;
+    },
+    storage() {
+      const cartData = localStorage.getItem("cart");
+
+      if (cartData) {
+        // Konvertáld a JSON sztringet JavaScript objektummá
+        const cartObject = JSON.parse(cartData);
+
+        // Ellenőrizd, hogy a cartObject valóban tartalmazza az "items" és "cartValue" tulajdonságokat
+        if (cartObject && cartObject.items && cartObject.cartValue !== null) {
+          // A Vuex store "cart" állapotának frissítése
+          this.$store.commit("setCart", cartObject);
+        }
+      }
     },
   },
 };
